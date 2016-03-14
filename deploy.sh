@@ -34,4 +34,5 @@ if [ "$OLD_CONTAINER_NAME" != "" ]; then
   ./cf ic rm $OLD_CONTAINER_NAME
 fi
 ./cf ic run -p 80 -m $BLUEMIX_MEMORY --name $NEW_CONTAINER_NAME registry.ng.bluemix.net/$REPO
+sleep 30s  # sometimes we can't bind the IP to a container in a very early stage of building
 ./cf ic ip bind $PUBLIC_IP $NEW_CONTAINER_NAME
