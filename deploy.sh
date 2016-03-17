@@ -16,6 +16,7 @@ $DOWNLOAD_DIR/rocker build
 # Push to Docker Hub
 docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD -e $DOCKERHUB_EMAIL
 docker push $REPO
+docker tag $REPO registry.ng.bluemix.net/$REPO
 # Download CloudFoundry CLI tool & BlueMix plugin
 cd $DOWNLOAD_DIR
 curl -o cf.tgz -L 'https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.16.1&source=github-rel'
@@ -24,7 +25,7 @@ tar xvfz cf.tgz
 # Push to private repo
 ./cf login -u $BLUEMIX_USERNAME -p $BLUEMIX_PASSWORD -a api.ng.bluemix.net
 ./cf ic init
-./cf ic cpi $REPO:latest registry.ng.bluemix.net/$REPO:latest
+docker push registry.ng.bluemix.net/$REPO
 # Restart the container
 OLD_CONTAINER_NAME=`./cf ic ps | grep -oE '[^ ]+$' | grep $CONTAINER_NAME.* | cat`
 NEW_CONTAINER_NAME="$CONTAINER_NAME.`date +%s`"
