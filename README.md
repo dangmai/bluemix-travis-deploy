@@ -29,3 +29,10 @@ Information about your BlueMix account.
 - `BLUEMIX_MEMORY`: How much memory to dedicate to this container,
 more information at [this page](https://console.ng.bluemix.net/docs/containers/container_cli_reference_cfic.html#container_cli_reference_cfic__run)
 - `PUBLIC_IP`: The IP used for the container of this image.
+
+The script can also optionally pass a list of environment variables to `cf ic run`,
+for example:
+
+```
+./docker.sh -e HOST=example.com EMAIL=name@example.com
+```

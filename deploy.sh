@@ -4,6 +4,22 @@ set -u
 set -e
 set -v
 
+# This script can take in a list of env vars and pass them on to cf ic run.
+# We handle those here.
+params=""
+declare -a envs=()
+while getopts "e:" opt; do
+  case $opt in
+    e) envs+=("$OPTARG");;
+  esac
+done
+shift $((OPTIND -1))
+if [[ ${#envs[@]} != 0 ]]; then
+  for val in "${envs[@]}"; do
+    params="$params -e $val"
+  done
+fi
+
 DOWNLOAD_DIR="/tmp"
 mkdir -p $DOWNLOAD_DIR
 cd $DOWNLOAD_DIR
@@ -29,7 +45,7 @@ docker push registry.ng.bluemix.net/$REPO
 # Restart the container
 OLD_CONTAINER_NAME=`./cf ic ps | grep -oE '[^ ]+$' | grep $CONTAINER_NAME.* | cat`
 NEW_CONTAINER_NAME="$CONTAINER_NAME.`date +%s`"
-./cf ic run -P -m $BLUEMIX_MEMORY --name $NEW_CONTAINER_NAME registry.ng.bluemix.net/$REPO
+./cf ic run -P -m $BLUEMIX_MEMORY $params --name $NEW_CONTAINER_NAME registry.ng.bluemix.net/$REPO
 sleep 30s  # sometimes we can't bind the IP to a container in a very early stage of building
 if [ "$OLD_CONTAINER_NAME" != "" ]; then
   ./cf ic ip unbind $PUBLIC_IP $OLD_CONTAINER_NAME
