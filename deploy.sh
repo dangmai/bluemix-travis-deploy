@@ -19,7 +19,7 @@ docker push $REPO
 docker tag $REPO registry.ng.bluemix.net/$REPO
 # Download CloudFoundry CLI tool & BlueMix plugin
 cd $DOWNLOAD_DIR
-curl -o cf.tgz -L 'https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.16.1&source=github-rel'
+curl -o cf.tgz -L 'https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.17.0&source=github-rel'
 tar xvfz cf.tgz
 ./cf install-plugin -f https://static-ice.ng.bluemix.net/ibm-containers-linux_x64
 # Push to private repo
