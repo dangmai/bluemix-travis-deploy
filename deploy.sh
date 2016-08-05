@@ -28,7 +28,7 @@ docker tag $REPO registry.ng.bluemix.net/$REPO
 # Download CloudFoundry BlueMix plugin
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" # current dir
 cd "$DIR/bin"
-tar xvfz "cf-cli_6.18.0_linux_x86-64.tgz"
+tar xvfz "cf-cli_6.21.0_linux_x86-64.tgz"
 ./cf install-plugin -f https://static-ice.ng.bluemix.net/ibm-containers-linux_x64
 # Push to private repo
 ./cf login -u $BLUEMIX_USERNAME -p $BLUEMIX_PASSWORD -a api.ng.bluemix.net
