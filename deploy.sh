@@ -37,10 +37,12 @@ docker push registry.ng.bluemix.net/$REPO
 # Restart the container
 OLD_CONTAINER_NAME=`./cf ic ps | grep -oE '[^ ]+$' | grep $CONTAINER_NAME.* | cat`
 NEW_CONTAINER_NAME="$CONTAINER_NAME.`date +%s`"
-./cf ic run -P -m $BLUEMIX_MEMORY $params --name $NEW_CONTAINER_NAME registry.ng.bluemix.net/$REPO
+./cf ic create -P -m $BLUEMIX_MEMORY $params --name $NEW_CONTAINER_NAME registry.ng.bluemix.net/$REPO
 sleep 30s  # sometimes we can't bind the IP to a container in a very early stage of building
 if [ "$OLD_CONTAINER_NAME" != "" ]; then
   ./cf ic ip unbind $PUBLIC_IP $OLD_CONTAINER_NAME
   ./cf ic rm -f $OLD_CONTAINER_NAME
 fi
 ./cf ic ip bind $PUBLIC_IP $NEW_CONTAINER_NAME
+sleep 30s
+./cf ic start $NEW_CONTAINER_NAME
